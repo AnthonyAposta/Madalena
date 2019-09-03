@@ -16,10 +16,8 @@ print(filenames)
 
 engine = pyttsx3.init()
 engine.setProperty('voice','brazil')
-frases = ["To vendo, um doente.","É só derivar.","faz cara de elétron.","doentasso, detectado.","Chegoooou o doente.", "meeu deus, la vem.", "Seu merdinha, saia daqui."]
-faustinho = ["olokinhooo meu.", "ta pegando fogo bicho.","olha essa fera aí meu."]
+frases = [" FRASE "] #insira aqui as frases que serão sintetizadas
 
-#formas geometricas e texto estã no tutorial 3
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
