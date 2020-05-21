@@ -16,16 +16,15 @@ for name in names:
                 num = 0
                 for images in filenames_2:
 
-                        
                         #print(dirpath_2+"/"+images)
                         img = cv2.imread(dirpath_2+'/'+images,cv2.IMREAD_GRAYSCALE)
                         img = cv2.resize(img,(100,100))
-                        M_90 = cv2.getRotationMatrix2D((50,50),90,1)
-                        M_270 = cv2.getRotationMatrix2D((50,50),270,1)
+                        #M_90 = cv2.getRotationMatrix2D((50,50),90,1)
+                        #M_270 = cv2.getRotationMatrix2D((50,50),270,1)
                         
-                        img_1 = cv2.warpAffine(img,M_90,(100,100))
-                        img_2 = cv2.warpAffine(img,M_270,(100,100))
-                        transf = [img,img_1,img_2]
+                        #img_1 = cv2.warpAffine(img,M_90,(100,100))
+                        #img_2 = cv2.warpAffine(img,M_270,(100,100))
+                        transf = [img]
                         #print(img)
                         if len(img) > 0:
                                 if not path.exists('/home/anthony/Documentos/Madalena/lab_proce/'+name):
@@ -34,12 +33,6 @@ for name in names:
                                         num +=1
                                         cv2.imwrite('/home/anthony/Documentos/Madalena/lab_proce/'+name+'/'+str(num)+".png",i)
                         print("done")
-
-
-
-
-
-
 
 
 #img = cv2.imread("/home/anthony/Documentos/Madalena/visual_memory/test.jpeg",1)

@@ -5,6 +5,7 @@ import random
 from datetime import datetime
 from playsound import playsound
 from os import walk
+import pickle
 
 
 f = []
@@ -16,16 +17,33 @@ print(filenames)
 
 engine = pyttsx3.init()
 engine.setProperty('voice','brazil')
-frases = [" FRASE "] #insira aqui as frases que serão sintetizadas
+frases = {'adolfo': "Adolfo detectado",
+         'chico': "Chico detectado",
+         'tadeu':"tadeu detectado",
+         'anthony': "anthony detectado",
+         'valeria': "valeria detectada",
+         'cafe': "cafe detectado",
+         'heloise': "heloise detectada",
+         'romulo': "romulo detectado",
+         'thiago': "thiago detectado",
+         'gi':"gi detectada"}
 
+#formas geometricas e texto estã no tutorial 3
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+recognizer = cv2.face.LBPHFaceRecognizer_create()
+recognizer.read("trainner.yml")
+
+with open("labels.pickle", "rb") as f:
+    labels = pickle.load(f)
+f.close()
+
 
 cap = cv2.VideoCapture(0)
 
 counter = 0
 max = 100
-
+img_num = 0
 while True:
 
     now = datetime.now()
@@ -35,15 +53,24 @@ while True:
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
     faces = face_cascade.detectMultiScale(gray,1.5,5)
-
     if len(faces) == 1 and counter > 10:
+    
         for (x,y,w,h) in faces:
             roi = frame[y:y+h,x:x+w]
-            cv2.imwrite("/home/anthony/Documentos/Madalena/visual_memory/%s.png"%dt_string,roi)
-            cv2.rectangle(frame, (x,y),(x+w,y+h),(255,0,0),2)
+            roi = cv2.resize(roi,(100,100))
+            
+            pred_roi = gray[y:y+h,x:x+w]
+            roi_roi = cv2.resize(roi,(100,100))
+            id_, conf = recognizer.predict(pred_roi)
+            if conf <= 50:
+                cv2.rectangle(frame, (x,y),(x+w,y+h),(255,0,0),2)
+                print(labels[id_], conf)
+                engine.say(frases[str(labels[id_])])
+                engine.runAndWait()
+
+
+        #playsound("/home/anthony/Documentos/Madalena/speak/%s"%(filenames[random.randint(0,len(filenames)-1)]))
         
-        
-        playsound("/home/anthony/Documentos/Madalena/speak/%s"%(filenames[random.randint(0,len(filenames)-1)]))
         #p = vlc.MediaPlayer("/home/anthony/Documentos/sentdex/opencv/audios/%s"%(filenames[random.randint(0,len(filenames)-1)]))
         #p.play()
         #mixer.init()
@@ -66,3 +93,6 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
+
+
